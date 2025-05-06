@@ -16,7 +16,7 @@ services:
             auth__showPii: "true"
             # Authorization configuration
             mappingStore__Id__Default: "demo-design" #Dataspace id
-            DotStatSuiteCoreCommonDbConnectionString: Server=${SQL_SERVER_HOST};Database=${COMMON_DB};User=${COMMON_DB_RO_USER};Password=${COMMON_DB_RO_PWD};TrustServerCertificate=True;
+            authorization__baseUrl: http://${HOST}:${AUTH_PORT}
             # Database configuration
             SQL_SERVER: ${SQL_SERVER_HOST}
             SQL_DATABASE: ${STRUCT_DB_DESIGN}
@@ -61,7 +61,7 @@ services:
             auth__showPii: "true"
             # Authorization configuration
             mappingStore__Id__Default: "demo-release" #Dataspace id
-            DotStatSuiteCoreCommonDbConnectionString: Server=${SQL_SERVER_HOST};Database=${COMMON_DB};User=${COMMON_DB_RO_USER};Password=${COMMON_DB_RO_PWD};TrustServerCertificate=True;
+            authorization__baseUrl: http://${HOST}:${AUTH_PORT}
             # Database configuration
             SQL_SERVER: ${SQL_SERVER_HOST}
             SQL_DATABASE: ${STRUCT_DB_RELEASE}
