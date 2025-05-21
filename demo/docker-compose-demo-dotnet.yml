@@ -90,6 +90,51 @@ services:
         networks:
           - dotstat_network
 
+    nsiws-demo-hpr:
+        image: siscc/sdmxri-nsi-maapi:${NSI_IMAGE_TAG}
+        container_name: nsiws-demo-hpr
+        ports:
+          - "${NSI_HPR_PORT}:80"
+        environment:
+            # Authentication configuration
+            auth__enabled: ${AUTH_ENABLED}
+            auth__allowAnonymous: "true"
+            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__clientId: ${KEYCLOAK_CLIENT_ID}
+            auth__requireHttps: "false"
+            auth__validateIssuer: "false"
+            auth__showPii: "true"
+            # Authorization configuration
+            mappingStore__Id__Default: "demo-hpr" #Dataspace id
+            authorization__baseUrl: http://${HOST}:${AUTH_PORT}
+            # Database configuration
+            SQL_SERVER: ${SQL_SERVER_HOST}
+            SQL_DATABASE: ${STRUCT_DB_HPR}
+            SQL_USER: ${STRUCT_DB_HPR_USER}
+            SQL_PASSWORD: ${STRUCT_DB_HPR_PWD}
+            SQL_PROVIDER: System.Data.SqlClient
+            # Dissemination database configuration
+            disseminationDbConnection__dbType: SqlServer
+            disseminationDbConnection__connectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DATA_DB_HPR_USER};Password=${DATA_DB_HPR_PWD};TrustServerCertificate=True;
+            # MAAPI.NET configuration
+            MA_SQL_USER: ${DB_SA_USER}
+            MA_SQL_PASSWORD: ${DB_SA_PASSWORD}
+            MA_ALWAYS_RESET: N
+            # Other NSI WS configuration
+            INSERT_NEW_ITEM_SCHEME_VALUES: "false"
+            SENDER_ID: "demo-hpr-DotStatV8"
+            enableReleaseManagement: "true"
+            excludeNonCodedDimensionsDuringConstraintCalculation: "true"
+            maxNumberObservationsToSortForPaginatedRequests: 1000000
+            applyContentConstraintsOnDataQueries: "false"
+        depends_on:
+          dbup-struct-hpr:
+            condition: service_completed_successfully
+        volumes:
+          - "./logs:/app/logs"
+        networks:
+          - dotstat_network
+
     transfer-service:
         image: siscc/dotstatsuite-core-transfer:${TRANSFER_IMAGE_TAG}
         container_name: transfer-service
@@ -133,6 +178,14 @@ services:
             SpacesInternal__1__AutoLog2DB: "true"
             SpacesInternal__1__AutoLog2DBLogLevel: "Notice"
             SpacesInternal__1__OptimizedForHighPerformanceReads:
+            SpacesInternal__2__Id: demo-hpr
+            SpacesInternal__2__DotStatSuiteCoreStructDbConnectionString: Server=${SQL_SERVER_HOST};Database=${STRUCT_DB_HPR};User=${STRUCT_DB_HPR_USER};Password=${STRUCT_DB_HPR_PWD};TrustServerCertificate=True;
+            SpacesInternal__2__DotStatSuiteCoreDataDbConnectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DATA_DB_HPR_USER};Password=${DATA_DB_HPR_PWD};TrustServerCertificate=True;
+            SpacesInternal__2__DataImportTimeOutInMinutes: 20
+            SpacesInternal__2__DatabaseCommandTimeoutInSec: 1200
+            SpacesInternal__2__AutoLog2DB: "true"
+            SpacesInternal__2__AutoLog2DBLogLevel: "Notice"
+            SpacesInternal__2__OptimizedForHighPerformanceReads: "true"
         volumes:
           - "./logs:/app/logs"
         ports:
@@ -145,6 +198,10 @@ services:
           dbup-data-release:
             condition: service_completed_successfully
           dbup-struct-release:
+            condition: service_completed_successfully
+          dbup-data-hpr:
+            condition: service_completed_successfully
+          dbup-struct-hpr:
             condition: service_completed_successfully
         networks:
           - dotstat_network
@@ -213,6 +270,28 @@ services:
         container_name: dbup-data-release
         environment:
             EXECUTION_PARAMETERS: upgrade --connectionString Server=${SQL_SERVER_HOST};Database=${DATA_DB_RELEASE};User=${DB_SA_USER};Password=${DB_SA_PASSWORD};TrustServerCertificate=True; --dataDb --loginName ${DATA_DB_RELEASE_USER} --loginPwd ${DATA_DB_RELEASE_PWD} --force --alterPassword
+        depends_on:
+          db:
+            condition: service_healthy
+        networks:
+          - dotstat_network
+
+    dbup-struct-hpr:
+        image: siscc/dotstatsuite-dbup:${DBUP_IMAGE_TAG}
+        container_name: dbup-struct-hpr
+        environment:
+            EXECUTION_PARAMETERS: upgrade --connectionString Server=${SQL_SERVER_HOST};Database=${STRUCT_DB_HPR};User=${DB_SA_USER};Password=${DB_SA_PASSWORD};TrustServerCertificate=True; --mappingStoreDb --loginName ${STRUCT_DB_HPR_USER} --loginPwd ${STRUCT_DB_HPR_PWD} --force --alterPassword
+        depends_on:
+          db:
+            condition: service_healthy
+        networks:
+          - dotstat_network
+
+    dbup-data-hpr:
+        image: siscc/dotstatsuite-dbup:${DBUP_IMAGE_TAG}
+        container_name: dbup-data-hpr
+        environment:
+            EXECUTION_PARAMETERS: upgrade --connectionString Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DB_SA_USER};Password=${DB_SA_PASSWORD};TrustServerCertificate=True; --dataDb --loginName ${DATA_DB_HPR_USER} --loginPwd ${DATA_DB_HPR_PWD} --force --alterPassword
         depends_on:
           db:
             condition: service_healthy
