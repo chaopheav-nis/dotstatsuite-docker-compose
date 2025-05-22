@@ -6,9 +6,10 @@ They can also be used as a starting point to setup production environments, but 
 > **IMPORTANT NOTE: This demo is pre-configured for a localhost setup and is guaranteed fully functional within the local environment. Don't hesitate to open a ticket if you have any issue with the out-of-the-box setup.  
 > However, any modification to this default setup and any usage outside the local environment are at your own risks and can not be supported. This disclaimer includes e.g. adding support for HTTPS, firewall proxy and access from outside the local environment.**
 
-# Setup of mono-tenant .Stat Suite v8 docker-based installation with two dataspaces
+# Setup of mono-tenant .Stat Suite v8 docker-based installation with three dataspaces
 
-The aim of this document is to provide a reference manual for setting up a demo of .Stat Suite: a mono-tenant configuration with two dataspaces (_design_ and _release_) using KeyCloak service for authentication.
+The aim of this document is to provide a reference manual for setting up a demo of .Stat Suite: a mono-tenant configuration with three dataspaces (_design_, _release_ and _hpr_) using KeyCloak service for authentication.  
+*Note:* "hpr" for High-Performance Read dataspace type, more details [here](https://sis-cc.gitlab.io/dotstatsuite-documentation/using-api/hpr/).
 
 For further details on the requirements please refer to the following GitLab ticket: https://gitlab.com/sis-cc/.stat-suite/dotstatsuite-docker-compose/-/issues/4#note_373485821
 
@@ -53,7 +54,7 @@ E.g. if you have cloned this repository to _/c/git/dotstatsuite-docker-compose/_
 
 ## Quick start - MS SQL Server back-end
 
-In this section you will find instruction how to start and stop docker services of demo mono-tenant installations with two dataspaces.
+In this section you will find instruction how to start and stop docker services of demo mono-tenant installations with three dataspaces.
 
 **It is assumed that the installation of all the required [prerequisites](#initialization-steps) are already successfully done.**
 
@@ -160,7 +161,7 @@ $ sudo ./stop-sqlserver.sh
 
 ## Quick start - MariaDb  back-end
 
-In this section you will find instruction how to start and stop docker services of demo mono-tenant installations with two dataspaces using MariaDb database.
+In this section you will find instruction how to start and stop docker services of demo mono-tenant installations with three dataspaces using MariaDb database.
 
 **It is assumed that the installation of all the required [prerequisites](#initialization-steps) are already successfully done.**
 
@@ -546,7 +547,7 @@ The file contains definition of a realm with the following details:
 
 The _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/docker-compose-demo-dotnet.yml_ docker-compose file contains definition of .Net based back-end services and the database engine:
 
-- NSI WS instances with .Stat Data plugin for the two dataspaces (design and release)
+- NSI WS instances with .Stat Data plugin for the three dataspaces (design, release, hpr)
 - Transfer web service
 - Authorization Management web service
 - Microsoft SQL Server for Linux
@@ -612,6 +613,7 @@ Further details on setting up a Gmail account for SMTP service can be found here
 > | MARIADB_ROOT_PASSWORD    | Admin password of MariaDb database                  | My-Mariadb-Pwd-123                                        |
 > | NSI_DESIGN_PORT          | Port of NSI WS - Design instance                    | 80                                                        |
 > | NSI_RELEASE_PORT         | Port of NSI WS - Release instance                   | 81                                                        |
+> | NSI_RELEASE_PORT         | Port of NSI WS - HPR instance                       | 82                                                        |
 > | TRANSFER_PORT            | Port of Transfer service                            | 93                                                        |
 > | AUTH_PORT                | Port of Authorization Management service            | 94                                                        |
 > | SQL_PORT                 | Port of MS SQL Server                               | 1434                                                      |
@@ -629,7 +631,13 @@ Further details on setting up a Gmail account for SMTP service can be found here
 > | STRUCT_DB_RELEASE_PWD    | Password for structure database (Release dataspace) | testLogin(!)Password                                      |
 > | DATA_DB_RELEASE          | Name of data database (Release dataspace)           | ReleaseDataDb                                             |
 > | DATA_DB_RELEASE_USER     | Username for data database (Release dataspace)      | testLoginReleaseData                                      |
-> | DATA_DB_RELEASE_PWD      | Password for data database (Release dataspace)      | testLogin(!)Password                                      |
+> | DATA_DB_HPR_PWD          | Password for data database (HPR dataspace)          | testLogin(!)Password                                      |
+> | STRUCT_DB_HPR            | Name of structure database (HPR dataspace)          | HPRStructDb                                               |
+> | STRUCT_DB_HPR_USER       | Username for structure database (HPR dataspace)     | testLoginHPRStruct                                        |
+> | STRUCT_DB_HPR_PWD        | Password for structure database (HPR dataspace)     | testLogin(!)Password                                      |
+> | DATA_DB_HPR              | Name of data database (HPR dataspace)               | HPRDataDb                                                 |
+> | DATA_DB_HPR_USER         | Username for data database (HPR dataspace)          | testLoginHPRData                                          |
+> | DATA_DB_HPR_PWD          | Password for data database (HPR dataspace)          | testLogin(!)Password                                      |
 > | COMMON_DB                | Name of common database                             | CommonDb                                                  |
 > | COMMON_DB_USER           | Username for common database                        | testLoginCommon                                           |
 > | COMMON_DB_PWD            | Password for common database                        | testLogin(!)Password                                      |
@@ -700,6 +708,7 @@ If the .Stat Suite installation is intended to be used with localhost access onl
 
 - NSI WS (Design dataspace): http://localhost:80/health
 - NSI WS (Release dataspace): http://localhost:81/health
+- NSI WS (HPR dataspace): http://localhost:82/health
 - Transfer service: http://localhost:93/health
 - Authorization Management service: http://localhost:94/health
 
@@ -707,6 +716,7 @@ Othwerwise please use the following pattern with using the proper hostname/ip ad
 
 - NSI WS (Design dataspace): http://[hostname_or_ip_address_of_your_server]:80/health
 - NSI WS (Release dataspace): http://[hostname_or_ip_address_of_your_server]:81/health
+- NSI WS (HPR dataspace): http://[hostname_or_ip_address_of_your_server]:82/health
 - Transfer service: http://[hostname_or_ip_address_of_your_server]:93/health
 - Authorization Management service: http://[hostname_or_ip_address_of_your_server]:94/health
 
@@ -719,11 +729,13 @@ If the .Stat Suite installation is intended to be used with localhost access onl
 
 - Codelists defined in Design dataspace: http://localhost:80/rest/codelist
 - Codelists defined in Release dataspace: http://localhost:81/rest/codelist
+- Codelists defined in HPR dataspace: http://localhost:82/rest/codelist
 
 Othwerwise please use the following pattern with using the proper hostname/ip address:
 
 - Codelists defined in Design dataspace: http://[hostname_or_ip_address_of_your_server]:80/rest/codelist
 - Codelists defined in Release dataspace: http://[hostname_or_ip_address_of_your_server]:81/rest/codelist
+- Codelists defined in HPR dataspace: http://[hostname_or_ip_address_of_your_server]:82/rest/codelist
 
 ##### Verification of the connection to Keycloak service
 
@@ -828,7 +840,7 @@ The _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/docker-compose-demo-js.yml_ docker-c
 #### Configuration of JavaScript services
 
 You can leave most of the configuration parameters with their defualt values.
-It's actually expected in case you would like to use the helper scripts of this repository for quicker setup of the monotenant installation of .Stat Suite with two dataspaces defined in .Net (back-end) services.
+It's actually expected in case you would like to use the helper scripts of this repository for quicker setup of the monotenant installation of .Stat Suite with three dataspaces defined in .Net (back-end) services.
 
 The only exception is the HOST parameter.
 In case you are planning to use this .Stat Suite installation only from localhost, you don't have to do anything with it.
@@ -893,10 +905,10 @@ You might also need to mount those files in case you dockerize Nginx server. Jus
 
 </details>
 
-##### Initialization of JavaScript services (monotenant with two dataspaces)
+##### Initialization of JavaScript services (monotenant with three dataspaces)
 
 Open a third terminal window (bash or Git Bash) and navigate to the _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/_ folder.
-Execute the following script to initialize a monotenant installation with two dataspaces using the sample files from the repository:
+Execute the following script to initialize a monotenant installation with three dataspaces using the sample files from the repository:
 
 ```sh
 $ scripts/init.config.mono-tenant.two-dataspaces.sh
@@ -1128,7 +1140,7 @@ If you are requested to login, use the configured (application) user, by default
 
 After successful login you should see the homepage of DLM with TestAdmin user authenticated.
 
-Please select both dataspace filters (demo-design and demo-release) and also check the "Codelist" artefact type.
+Please select both dataspace filters (demo-design, demo-release and demo-hpr) and also check the "Codelist" artefact type.
 
 Now the default codelists defined in mapping store should appear on the screen.
 
