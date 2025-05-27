@@ -16,7 +16,7 @@ services:
             auth__showPii: "true"
             # Authorization configuration
             mappingStore__Id__Default: "demo-design" #Dataspace id
-            authorization__baseUrl: http://${HOST}:${AUTH_PORT}
+            authorization__baseUrl: http://auth-service
             # Database configuration
             SQL_SERVER: ${SQL_SERVER_HOST}
             SQL_DATABASE: ${STRUCT_DB_DESIGN}
@@ -61,7 +61,7 @@ services:
             auth__showPii: "true"
             # Authorization configuration
             mappingStore__Id__Default: "demo-release" #Dataspace id
-            authorization__baseUrl: http://${HOST}:${AUTH_PORT}
+            authorization__baseUrl: http://auth-service
             # Database configuration
             SQL_SERVER: ${SQL_SERVER_HOST}
             SQL_DATABASE: ${STRUCT_DB_RELEASE}
@@ -106,7 +106,7 @@ services:
             auth__showPii: "true"
             # Authorization configuration
             mappingStore__Id__Default: "demo-hpr" #Dataspace id
-            authorization__baseUrl: http://${HOST}:${AUTH_PORT}
+            authorization__baseUrl: http://auth-service
             # Database configuration
             SQL_SERVER: ${SQL_SERVER_HOST}
             SQL_DATABASE: ${STRUCT_DB_HPR}
