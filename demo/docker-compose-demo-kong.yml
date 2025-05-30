@@ -43,13 +43,15 @@ services:
         image: siscc/dotstatsuite-core-get-data:${GET_DATA_IMAGE_TAG}
         container_name: get-data
         environment:
-            SpacesInternal__0__Id: demo-hpr
-            SpacesInternal__0__DotStatSuiteCoreStructDbConnectionString: Server=${SQL_SERVER_HOST};Database=${STRUCT_DB_HPR};User=${STRUCT_DB_HPR_USER};Password=${STRUCT_DB_HPR_PWD};TrustServerCertificate=True;
-            SpacesInternal__0__DotStatSuiteCoreDataDbConnectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DATA_DB_HPR_USER};Password=${DATA_DB_HPR_PWD};TrustServerCertificate=True;
-            SpacesInternal__0__DataImportTimeOutInMinutes: 20
-            SpacesInternal__0__DatabaseCommandTimeoutInSec: 1200
-            SpacesInternal__0__AutoLog2DB: "true"
-            SpacesInternal__0__AutoLog2DBLogLevel: "Notice"
+            ServiceId: getData
+            DefaultTenantId: demo-tenant
+            Tenants__0__Id: demo-tenant
+            Tenants__0__Name: Demo tenant
+            Tenants__0__DefaultDataSpaceId: demo-hpr
+            Tenants__0__DataSpaces__0__Id: demo-hpr
+            Tenants__0__DataSpaces__0__DotStatSuiteCoreStructDbConnectionString: Server=${SQL_SERVER_HOST};Database=${STRUCT_DB_HPR};User=${STRUCT_DB_HPR_USER};Password=${STRUCT_DB_HPR_PWD};TrustServerCertificate=True;
+            Tenants__0__DataSpaces__0__DotStatSuiteCoreDataDbConnectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DATA_DB_HPR_USER};Password=${DATA_DB_HPR_PWD};TrustServerCertificate=True;
+            Tenants__0__DataSpaces__0__DatabaseCommandTimeoutInSec: 3600
         volumes:
           - "./logs:/app/logs"
         ports:
