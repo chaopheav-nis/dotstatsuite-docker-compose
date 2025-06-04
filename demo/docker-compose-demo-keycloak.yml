@@ -4,7 +4,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres:12
+    image: postgres:${POSTGRES_IMAGE_TAG}
     container_name: postgres
     restart: always 
     volumes:
