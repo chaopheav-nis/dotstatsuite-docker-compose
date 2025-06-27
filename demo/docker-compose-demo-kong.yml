@@ -13,7 +13,7 @@ services:
           KONG_PROXY_ERROR_LOG: /dev/stderr
           KONG_ADMIN_ACCESS_LOG: /dev/stdout
           KONG_ADMIN_ERROR_LOG: /dev/stderr
-          KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.yaml"
+          KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.json"
           KONG_STATUS_LISTEN: "0.0.0.0:8100"
         ports:
           # The following two environment variables default to an insecure value (0.0.0.0)
