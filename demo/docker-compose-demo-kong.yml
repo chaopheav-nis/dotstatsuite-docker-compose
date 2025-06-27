@@ -1,0 +1,64 @@
+services:
+    kong:
+        image: kong:3.9.0
+        container_name: kong
+        user: kong
+        environment:
+          KONG_DATABASE: off
+          KONG_ROUTER_FLAVOR: expressions
+          KONG_PROXY_LISTEN: "${KONG_PROXY_LISTEN:-0.0.0.0:8000}"
+          KONG_ADMIN_LISTEN: "${KONG_ADMIN_LISTEN:-0.0.0.0:8001}"
+          KONG_ADMIN_GUI_LISTEN: "${KONG_ADMIN_GUI_LISTEN:-0.0.0.0:8002}"
+          KONG_PROXY_ACCESS_LOG: /dev/stdout
+          KONG_PROXY_ERROR_LOG: /dev/stderr
+          KONG_ADMIN_ACCESS_LOG: /dev/stdout
+          KONG_ADMIN_ERROR_LOG: /dev/stderr
+          KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.json"
+          KONG_STATUS_LISTEN: "0.0.0.0:8100"
+        ports:
+          # The following two environment variables default to an insecure value (0.0.0.0)
+          # according to the CIS Security test.
+          - "${KONG_INBOUND_PROXY_LISTEN:-0.0.0.0}:8000:8000/tcp"
+          # Making them mandatory but undefined, like so would be backwards-breaking:
+          # - "${KONG_INBOUND_PROXY_LISTEN?Missing inbound proxy host}:8000:8000/tcp"
+          # - "${KONG_INBOUND_SSL_PROXY_LISTEN?Missing inbound proxy ssl host}:8443:8443/tcp"
+          # Alternative is deactivating check 5.13 in the security bench, if we consider Kong's own config to be enough security here
+          - "8001:8001/tcp"
+          - "8002:8002/tcp"
+          - "8100:8100/tcp"
+        healthcheck:
+          test: [ "CMD", "kong", "health" ]
+          interval: 10s
+          timeout: 10s
+          retries: 10
+        restart: on-failure:5
+        volumes:
+          - ./kong-config:/opt/kong      
+        security_opt:
+          - no-new-privileges
+        networks:
+          - dotstat_network  
+      
+    get-data:
+        image: siscc/dotstatsuite-core-get-data:${GET_DATA_IMAGE_TAG}
+        container_name: get-data
+        environment:
+            ServiceId: getData
+            DefaultTenantId: demo-tenant
+            Tenants__0__Id: demo-tenant
+            Tenants__0__Name: Demo tenant
+            Tenants__0__DefaultDataSpaceId: demo-hpr
+            Tenants__0__DataSpaces__0__Id: demo-hpr
+            Tenants__0__DataSpaces__0__DotStatSuiteCoreStructDbConnectionString: Server=${SQL_SERVER_HOST};Database=${STRUCT_DB_HPR};User=${STRUCT_DB_HPR_USER};Password=${STRUCT_DB_HPR_PWD};TrustServerCertificate=True;
+            Tenants__0__DataSpaces__0__DotStatSuiteCoreDataDbConnectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DATA_DB_HPR_USER};Password=${DATA_DB_HPR_PWD};TrustServerCertificate=True;
+            Tenants__0__DataSpaces__0__DatabaseCommandTimeoutInSec: 3600
+        volumes:
+          - "./logs:/app/logs"
+        ports:
+          - "${GET_DATA_PORT}:80"
+        networks:
+          - dotstat_network      
+      
+networks:
+  dotstat_network:
+    name: dotstat_common_network      

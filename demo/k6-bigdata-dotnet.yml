@@ -1,60 +1,27 @@
 services:
-    
-    nsiws-demo-design:
+            
+    nsiws-demo-hpr:
       environment:
         applyContentConstraintsOnDataQueries: "false"
       extends:
         file: docker-compose-demo-dotnet.yml
-        service: nsiws-demo-design
-
-    nsiws-demo-release:
-      environment:
-        applyContentConstraintsOnDataQueries: "false"
-      extends:
-        file: docker-compose-demo-dotnet.yml
-        service: nsiws-demo-release
+        service: nsiws-demo-hpr
 
     auth-service:
       extends:
         file: docker-compose-demo-dotnet.yml
         service: auth-service
-
-    transfer-service:
-      environment:
-        TempFileDirectory: /app/temp
-        SpacesInternal__0__DataImportTimeOutInMinutes: 1440
-        SpacesInternal__0__DatabaseCommandTimeoutInSec: 18000
-        SpacesInternal__0__OptimizedForHighPerformanceReads: true
-        SpacesInternal__1__DataImportTimeOutInMinutes: 1440
-        SpacesInternal__1__DatabaseCommandTimeoutInSec: 18000
-        SpacesInternal__1__OptimizedForHighPerformanceReads: true
-      volumes:
-        - "/mnt/k6_sql_volume/bind/temp:/app/temp"
-        - "/mnt/k6_data_volume:/app/import"  
-      extends:
-        file: docker-compose-demo-dotnet.yml
-        service: transfer-service
     
-    dbup-struct-design:
+    dbup-struct-hpr:
       extends:
         file: docker-compose-demo-dotnet.yml
-        service: dbup-struct-design
+        service: dbup-struct-hpr
         
-    dbup-data-design:
+    dbup-data-hpr:
       extends:
         file: docker-compose-demo-dotnet.yml
-        service: dbup-data-design
-        
-    dbup-struct-release:
-      extends:
-        file: docker-compose-demo-dotnet.yml
-        service: dbup-struct-release
-        
-    dbup-data-release:
-      extends:
-        file: docker-compose-demo-dotnet.yml
-        service: dbup-data-release
-    
+        service: dbup-data-hpr
+            
     dbup-common:
       extends:
         file: docker-compose-demo-dotnet.yml
@@ -66,6 +33,16 @@ services:
       extends:
         file: docker-compose-demo-dotnet.yml
         service: db
+        
+    kong:
+      extends:
+        file: docker-compose-demo-kong.yml
+        service: kong
+        
+    get-data:
+      extends:
+        file: docker-compose-demo-kong.yml
+        service: get-data        
 
 networks:
   dotstat_network:
