@@ -9,7 +9,7 @@ services:
             # Authentication configuration
             auth__enabled: ${AUTH_ENABLED}
             auth__allowAnonymous: "true"
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
             auth__requireHttps: "false"
             auth__validateIssuer: "false"
@@ -54,7 +54,7 @@ services:
             # Authentication configuration
             auth__enabled: ${AUTH_ENABLED}
             auth__allowAnonymous: "true"
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
             auth__requireHttps: "false"
             auth__validateIssuer: "false"
@@ -95,9 +95,9 @@ services:
         container_name: transfer-service
         environment:
             auth__Enabled: ${AUTH_ENABLED}
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
-            auth__authorizationUrl: http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}/auth/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth
+            auth__authorizationUrl: http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth
             auth__scopes__0: openid
             auth__scopes__1: profile
             auth__scopes__2: email
@@ -154,9 +154,9 @@ services:
         container_name: auth-service
         environment:
             auth__enabled: ${AUTH_ENABLED}
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
-            auth__authorizationUrl: http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}/auth/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth
+            auth__authorizationUrl: http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth
             auth__scopes__0: openid
             auth__scopes__1: profile
             auth__scopes__2: email
