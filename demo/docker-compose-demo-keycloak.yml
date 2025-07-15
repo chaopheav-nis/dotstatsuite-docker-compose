@@ -2,6 +2,7 @@ volumes:
   postgres_data:
       driver: local
 
+
 services:
   postgres:
     image: postgres:16
@@ -28,8 +29,9 @@ services:
     entrypoint:
       - /opt/keycloak/bin/kc.sh
       - start
+      - --import-realm
     volumes:
-        - "./realm:/opt/jboss/import"
+      - "./realm:/opt/keycloak/data/import"
     environment:
         KC_HOSTNAME: ${KEYCLOAK_HOST}
         KC_HTTP_ENABLED: true

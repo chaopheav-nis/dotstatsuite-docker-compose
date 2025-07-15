@@ -79,12 +79,6 @@ sed -Ei "s#^HOST=.*#HOST=$HOST#g" .env
 # Start docker services #
 #########################
 
-read -p "Clean solr volumes ? (Y/N)" cl
-if [ $cl = 'y' ] || [ $cl = 'Y' ]
-then
-   scripts/clean-solr-volumes.sh;
-fi
-
 echo "Starting Keycloak services"
 #docker compose -f docker-compose-demo-keycloak.yml up -d --quiet-pull --pull always
 docker compose -f docker-compose-demo-keycloak.yml up -d --quiet-pull
@@ -96,23 +90,6 @@ docker compose -f "$DOTNET_COMPOSE_FILE" up -d --quiet-pull
 echo "Starting JS services"
 #docker compose -f docker-compose-demo-js.yml up -d --quiet-pull --pull always
 docker compose -f docker-compose-demo-js.yml up -d --quiet-pull
-
-echo -n "Services being started."
-
-#Wait until keycloak service is started ('Admin console listening' message appears in log')
-LOG="$(docker logs keycloak 2>&1 | grep -o 'Admin console listening')"
-
-while [ -z "$LOG" ];
-do
-   echo -n "."
-   sleep 2
-
-   LOG="$(docker logs keycloak 2>&1 | grep -o 'Admin console listening')"
-done
-
-echo "."
-echo "Switching off HTTPS requirement in Keycloak"
-./scripts/disable-ssl.sh
 
 echo "Services started:"
 
