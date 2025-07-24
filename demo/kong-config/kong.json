@@ -18,9 +18,15 @@
         },
 		{
           "name": "nsi-exceptions-not-supported-by-new-service-route",		 
-          "expression": "http.path ^= \"/rest/data\" && (http.queries.dimensionAtObservation != \"AllDimensions\" || http.queries.asOf != \"\" || http.queries.includeHistory != \"\" || http.queries.updateAfter != \"\" || (http.queries.format != \"jsondata\" && http.queries.format != \"csv\" && http.queries.format != \"csvfile\" && http.queries.format != \"csvfilewithlabels\"))",
+          "expression": "http.path ^= \"/rest/data\" && (http.queries.detail != \"full\" || http.queries.providerRef != \"all\" || http.queries.asOf != \"\" || http.queries.includeHistory != \"\" || http.queries.updateAfter != \"\" || (http.queries.format != \"\" && http.queries.format != \"jsondata\" && http.queries.format != \"json-data-2.0.0\" && http.queries.format != \"csv-data-2.0.0\" && http.queries.format != \"csvfilewithlabels\"))",
           "strip_path": false,
 		  "priority": 100
+        },
+		{
+          "name": "nsi-explicit-redirect",
+          "expression": "http.path ^= \"/nsi\"",
+          "strip_path": true,
+		  "priority": 1
         }
       ]
     },
@@ -34,15 +40,21 @@
       "routes": [
         {
           "name": "ds-data-route",
-          "expression": "http.path ^= \"/rest/data\" && (http.headers.accept ~ \"application/vnd\\\\.sdmx\\\\.data\\\\+(json|csv)\" || http.queries.format == \"jsondata\" || http.queries.format == \"csv\" || http.queries.format == \"csvfile\" || http.queries.format == \"csvfilewithlabels\")",
+          "expression": "http.path ^= \"/rest/data\" && http.queries.dimensionAtObservation == \"AllDimensions\" && (http.headers.accept ~ \"application/vnd\\\\.sdmx\\\\.data\\\\+(json|csv);version=2.0\" || http.queries.format == \"jsondata\" || http.queries.format == \"json-data-2.0.0\" || http.queries.format == \"csv-data-2.0.0\" || http.queries.format == \"csvfilewithlabels\")",
           "strip_path": false,
 		  "priority": 90
         },
 		{
           "name": "ds-availableconstraint-route",
-          "expression": "http.path ^= \"/rest/availableconstraint\" && http.headers.accept ~ \"structure\\\\+json\"",
+          "expression": "http.path ^= \"/rest/availableconstraint\" && http.queries.mode == \"available\" && http.headers.accept ~ \"structure\\\\+json\"",
           "strip_path": false,
 		  "priority": 90
+        },
+		{
+          "name": "get-data-explicit-redirect",
+          "expression": "http.path ^= \"/get-data\"",
+          "strip_path": true,
+		  "priority": 1
         }
       ]
     }
