@@ -49,7 +49,7 @@ services:
             Tenants__0__Name: Demo tenant
             Tenants__0__DefaultDataSpaceId: demo-hpr
             Tenants__0__DataSpaces__0__Id: demo-hpr
-            Tenants__0__DataSpaces__0__DotStatSuiteCoreStructDbConnectionString: Server=${SQL_SERVER_HOST};Database=${STRUCT_DB_HPR};User=${STRUCT_DB_HPR_USER};Password=${STRUCT_DB_HPR_PWD};TrustServerCertificate=True;
+            Tenants__0__DataSpaces__0__SDMXStructureRegistryBaseUrl: http://nsiws-demo-hpr
             Tenants__0__DataSpaces__0__DotStatSuiteCoreDataDbConnectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DATA_DB_HPR_USER};Password=${DATA_DB_HPR_PWD};TrustServerCertificate=True;
             Tenants__0__DataSpaces__0__DatabaseCommandTimeoutInSec: 3600
         volumes:
