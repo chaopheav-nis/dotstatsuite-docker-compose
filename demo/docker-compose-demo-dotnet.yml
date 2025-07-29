@@ -37,11 +37,14 @@ services:
             excludeNonCodedDimensionsDuringConstraintCalculation: "true"
             maxNumberObservationsToSortForPaginatedRequests: 1000000
             applyContentConstraintsOnDataQueries: "true"
+            # Configuration related variables
+            OVERWRITE_EXISTING_CONFIG: Y
         depends_on:
           dbup-struct-design:
             condition: service_completed_successfully
         volumes:
           - "./logs:/app/logs"
+          - "./nsi-ws-design-config:/app/config"
         networks:
           - dotstat_network
 
@@ -82,11 +85,14 @@ services:
             excludeNonCodedDimensionsDuringConstraintCalculation: "true"
             maxNumberObservationsToSortForPaginatedRequests: 1000000
             applyContentConstraintsOnDataQueries: "true"
+            # Configuration related variables
+            OVERWRITE_EXISTING_CONFIG: N
         depends_on:
           dbup-struct-release:
             condition: service_completed_successfully
         volumes:
           - "./logs:/app/logs"
+          - "./nsi-ws-release-config:/app/config"
         networks:
           - dotstat_network
 

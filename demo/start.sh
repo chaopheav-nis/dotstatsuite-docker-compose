@@ -65,6 +65,9 @@ if [ ! -d $DIR_CONFIG ]; then
    ./scripts/download-config.sh;
 fi
 
+read -p "Clean solr volumes ? (Y/N)" cleanSolr
+
+read -p "Use api gateway (kong) and sdmx data service ? (Y/N)" useKong
 
 # Re-initialize js configuration
 scripts/init.config.mono-tenant.two-dataspaces.sh $HOST
@@ -79,8 +82,8 @@ sed -Ei "s#^HOST=.*#HOST=$HOST#g" .env
 # Start docker services #
 #########################
 
-read -p "Clean solr volumes ? (Y/N)" cl
-if [ $cl = 'y' ] || [ $cl = 'Y' ]
+
+if [ $cleanSolr = 'y' ] || [ $cleanSolr = 'Y' ]
 then
    scripts/clean-solr-volumes.sh;
 fi
@@ -95,13 +98,16 @@ docker compose -f "$DOTNET_COMPOSE_FILE" up -d --quiet-pull
 echo "Starting JS services"
 docker compose -f docker-compose-demo-js.yml up -d --quiet-pull
 
-read -p "Use api gateway (kong) and sdmx data service ? (Y/N)" cl
-if [ $cl = 'y' ] || [ $cl = 'Y' ]
+if [ $useKong = 'y' ] || [ $useKong = 'Y' ]
 then
    echo "Starting kong"
    docker compose -f docker-compose-demo-kong.yml up -d --quiet-pull
    find ./config -type f -name "tenants.json" -exec sed -Ei 's#"http://'$HOST:82'#"http://'$HOST:8000'#g' {} +
 fi
+
+echo "Adding read access for anonymous (all) users if not yet added"
+source ./.env
+docker exec -i mssql //opt/mssql-tools18/bin/sqlcmd -C -S $SQL_SERVER_HOST -U $DB_SA_USER -P $DB_SA_PASSWORD -Q "INSERT INTO $COMMON_DB.[dbo].[AUTHORIZATIONRULES] ([USERMASK],[ISGROUP],[DATASPACE],[ARTEFACTTYPE],[ARTEFACTAGENCYID],[ARTEFACTID],[ARTEFACTVERSION],[PERMISSION],[EDITEDBY],[EDITDATE]) SELECT '*',0,'*',0,'*','*','*',3,'system',getdate() WHERE NOT EXISTS (SELECT 1 FROM COMMONDB.[dbo].[AUTHORIZATIONRULES] WHERE [USERMASK]='*' AND [ISGROUP]=0 AND [DATASPACE]='*' AND [ARTEFACTTYPE]=0 AND [ARTEFACTAGENCYID]='*' AND [ARTEFACTID]='*' AND [ARTEFACTVERSION]='*');"
 
 echo -n "Services being started."
 
