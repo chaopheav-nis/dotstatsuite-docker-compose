@@ -3,6 +3,7 @@ services:
     nsiws-demo-design:
         image: siscc/sdmxri-nsi-maapi:${NSI_IMAGE_TAG}
         container_name: nsiws-demo-design
+        user: app
         ports:
           - "${NSI_DESIGN_PORT}:80"
         environment:
@@ -44,13 +45,13 @@ services:
             condition: service_completed_successfully
         volumes:
           - "./logs:/app/logs"
-          - "./nsi-ws-design-config:/app/config"
         networks:
           - dotstat_network
 
     nsiws-demo-release:
         image: siscc/sdmxri-nsi-maapi:${NSI_IMAGE_TAG}
         container_name: nsiws-demo-release
+        user: app
         ports:
           - "${NSI_RELEASE_PORT}:80"
         environment:
@@ -92,7 +93,6 @@ services:
             condition: service_completed_successfully
         volumes:
           - "./logs:/app/logs"
-          - "./nsi-ws-release-config:/app/config"
         networks:
           - dotstat_network
 
