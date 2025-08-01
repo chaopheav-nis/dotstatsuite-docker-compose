@@ -3,6 +3,7 @@ services:
     nsiws-demo-design:
         image: siscc/sdmxri-nsi-maapi:${NSI_IMAGE_TAG}
         container_name: nsiws-demo-design
+        user: app
         ports:
           - "${NSI_DESIGN_PORT}:80"
         environment:
@@ -37,6 +38,8 @@ services:
             excludeNonCodedDimensionsDuringConstraintCalculation: "true"
             maxNumberObservationsToSortForPaginatedRequests: 1000000
             applyContentConstraintsOnDataQueries: "true"
+            # Configuration related variables
+            OVERWRITE_EXISTING_CONFIG: Y
         depends_on:
           dbup-struct-design:
             condition: service_completed_successfully
@@ -48,6 +51,7 @@ services:
     nsiws-demo-release:
         image: siscc/sdmxri-nsi-maapi:${NSI_IMAGE_TAG}
         container_name: nsiws-demo-release
+        user: app
         ports:
           - "${NSI_RELEASE_PORT}:80"
         environment:
@@ -82,6 +86,8 @@ services:
             excludeNonCodedDimensionsDuringConstraintCalculation: "true"
             maxNumberObservationsToSortForPaginatedRequests: 1000000
             applyContentConstraintsOnDataQueries: "true"
+            # Configuration related variables
+            OVERWRITE_EXISTING_CONFIG: N
         depends_on:
           dbup-struct-release:
             condition: service_completed_successfully
