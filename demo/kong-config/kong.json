@@ -28,7 +28,15 @@
           "strip_path": true,
 		  "priority": 1
         }
-      ]
+      ],
+	  "plugins": [
+	    {
+		  "name": "response-transformer",
+		  "config":{
+		    "append": {"headers": ["Server:dotstatsuite-core-nsi"]}
+		  }
+		}
+	  ]
     },
 	{
       "host": "get-data",
@@ -56,7 +64,15 @@
           "strip_path": true,
 		  "priority": 1
         }
-      ]
+      ],
+	  "plugins": [
+	    {
+		  "name": "response-transformer",
+		  "config":{
+		    "append": {"headers": ["Server:dotstatsuite-core-getdata"]}
+		  }
+		}
+	  ]
     }
   ]
 }

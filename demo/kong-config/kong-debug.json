@@ -28,7 +28,15 @@
           "strip_path": true,
 		  "priority": 1
         }
-      ]
+      ],
+	  "plugins": [
+	    {
+		  "name": "response-transformer",
+		  "config":{
+		    "append": {"headers": ["Server:dotstatsuite-core-nsi"]}
+		  }
+		}
+	  ]
     },
 	{
       "host": "httpbin.konghq.com",
@@ -57,7 +65,15 @@
           "strip_path": true,
 		  "priority": 1
         }
-      ]
+      ],
+	  "plugins": [
+	    {
+		  "name": "response-transformer",
+		  "config":{
+		    "append": {"headers": ["Server:dotstatsuite-core-getdata"]}
+		  }
+		}
+	  ]
     }
   ]
 }
