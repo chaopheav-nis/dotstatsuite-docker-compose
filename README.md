@@ -6,9 +6,10 @@ They can also be used as a starting point to setup production environments, but 
 > **IMPORTANT NOTE: This demo is pre-configured for a localhost setup and is guaranteed fully functional within the local environment. Don't hesitate to open a ticket if you have any issue with the out-of-the-box setup.  
 > However, any modification to this default setup and any usage outside the local environment are at your own risks and can not be supported. This disclaimer includes e.g. adding support for HTTPS, firewall proxy and access from outside the local environment.**
 
-# Setup of mono-tenant .Stat Suite v8 docker-based installation with two dataspaces
+# Setup of mono-tenant .Stat Suite v8 docker-based installation with three dataspaces
 
-The aim of this document is to provide a reference manual for setting up a demo of .Stat Suite: a mono-tenant configuration with two dataspaces (_design_ and _release_) using KeyCloak service for authentication.
+The aim of this document is to provide a reference manual for setting up a demo of .Stat Suite: a mono-tenant configuration with three dataspaces (_design_, _release_ and _hpr_) using KeyCloak service for authentication.  
+*Note:* "hpr" for High-Performance Read dataspace type, more details [here](https://sis-cc.gitlab.io/dotstatsuite-documentation/using-api/hpr/).
 
 For further details on the requirements please refer to the following GitLab ticket: https://gitlab.com/sis-cc/.stat-suite/dotstatsuite-docker-compose/-/issues/4#note_373485821
 
@@ -53,7 +54,7 @@ E.g. if you have cloned this repository to _/c/git/dotstatsuite-docker-compose/_
 
 ## Quick start - MS SQL Server back-end
 
-In this section you will find instruction how to start and stop docker services of demo mono-tenant installations with two dataspaces.
+In this section you will find instruction how to start and stop docker services of demo mono-tenant installations with three dataspaces.
 
 **It is assumed that the installation of all the required [prerequisites](#initialization-steps) are already successfully done.**
 
@@ -92,7 +93,7 @@ $ ./start-sqlserver.sh dotstat-demo.myorganization.org
 <details>
 <summary>Alternative start options for MS SQL Server back-end</summary>
 
-1. The default database is MS SQL Server when **DATABASE_TYPE** environment variable is **NOT set** or is not *MariaDb*
+1. The default database is MS SQL Server when **DATABASE_TYPE** environment variable is **NOT set**
 
    ```sh
    $ ./start.sh
@@ -137,7 +138,7 @@ $ sudo ./stop-sqlserver.sh
 <details>
 <summary>Alternative stop options for MS SQL Server back-end</summary>
 
-1. The default database is MS SQL Server when **DATABASE_TYPE** environment variable is **NOT set** or is not *MariaDb*
+1. The default database is MS SQL Server when **DATABASE_TYPE** environment variable is **NOT set**
 
    ```sh
    $ ./stop.sh
@@ -158,116 +159,6 @@ $ sudo ./stop-sqlserver.sh
 
 </details>
 
-## Quick start - MariaDb  back-end
-
-In this section you will find instruction how to start and stop docker services of demo mono-tenant installations with two dataspaces using MariaDb database.
-
-**It is assumed that the installation of all the required [prerequisites](#initialization-steps) are already successfully done.**
-
-### Starting docker compose services of demo configuration - MariaDb  back-end
-
-Open a new bash (Linux) or Git Bash (Windows) terminal.
-Please navigate to _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo_ folder.
-
-Start the docker services with the following command:
-
-```sh
-$ ./start-mariadb.sh
-```
-
-On **Linux** systems the execution of this script may require _elevated privilege_.
-In this case please start the script with 'sudo' command as follows:
-
-```sh
-$ sudo ./start-mariadb.sh
-```
-
-When the script is executed without a parameter then it starts the services to run locally on your machine:
-
-- On Windows and Linux the following hostname is used: localhost
-
-The actually used hostname/ip address highlighted in green is shown in the 2nd line of the log written by the script:
-
-> The following host address is being applied on configuration files: localhost
-
-If you want to make your demo installation accessible from other computers (e.g. when installation is done on a VM in the cloud) you have to provide the hostname/ip address of your host machine, e.g. when the hostname is _dotstat-demo.myorganization.org_:
-
-```sh
-$ ./start-mariadb.sh dotstat-demo.myorganization.org
-```
-
-<details>
-<summary>Alternative start options for MariaDb back-end</summary>
-
-1. Using **DATABASE_TYPE** environment variable
-
-   ```sh
-   $ export DATABASE_TYPE=MariaDb
-   $ ./start.sh
-   ```
-
-1. Using **DATABASE_TYPE** environment variable inline
-
-   ```sh
-   $ DATABASE_TYPE=MariaDb ./start.sh
-   ```
-
-1. Using **--useMariaDb** commandline parameter
-
-   ```sh
-   $ ./start.sh --useMariadb
-   ```
-   or 
-   ```sh
-   $ ./start.sh dotstat-demo.myorganization.org --useMariadb 
-   ```
-
-</details>
-
-When all the services started properly, you should see the list of the running services on the screen started by the script.
-
-In case you would need to see the logs produced by the containers, please see [this section](#checking-logs-of-detached-docker-containers).
-
-### Stopping docker compose services of demo configuration - MariaDb  back-end
-
-In a bash (Linux) or Git Bash (Windows) terminal, please navigate to _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo_ folder.
-
-Execute the following script to stop the docker services:
-
-```sh
-$ ./stop-mariadb.sh
-```
-
-On **Linux** systems the execution of this script may require _elevated privilege_.
-In this case please start the script with 'sudo' command as follows:
-
-```sh
-$ sudo ./stop-mariadb.sh
-```
-
-<details>
-<summary>Alternative stop options for MariaDb back-end</summary>
-
-1. Using **DATABASE_TYPE** environment variable
-
-   ```sh
-   $ export DATABASE_TYPE=MariaDb
-   $ ./stop.sh
-   ```
-
-1. Using **DATABASE_TYPE** environment variable inline
-
-   ```sh
-   $ DATABASE_TYPE=MariaDb ./stop.sh
-   ```
-
-1. Using **--useMariaDb** commandline parameter
-
-   ```sh
-   $ ./stop.sh --useMariadb
-   ```
-
-</details>
 
 ## Architecture
 
@@ -546,7 +437,7 @@ The file contains definition of a realm with the following details:
 
 The _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/docker-compose-demo-dotnet.yml_ docker-compose file contains definition of .Net based back-end services and the database engine:
 
-- NSI WS instances with .Stat Data plugin for the two dataspaces (design and release)
+- NSI WS instances with .Stat Data plugin for the three dataspaces (design, release, hpr)
 - Transfer web service
 - Authorization Management web service
 - Microsoft SQL Server for Linux
@@ -559,7 +450,6 @@ The _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/docker-compose-demo-dotnet.yml_ dock
 >>>
 Location of docker-compose files: 
 - back-end services using MS SQL Server: \*$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/**docker-compose-demo-dotnet.yml\***
-- back-end services using MariaDb: \*$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/**docker-compose-demo-dotnet-mariadb.yml\***
 
 | Image name                                                                                                  | Version             | Description                                                                                  | Repository                                                              |
 | ----------------------------------------------------------------------------------------------------------- | ------------------  | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
@@ -568,7 +458,6 @@ Location of docker-compose files:
 | [siscc/dotstatsuite-core-auth-management](https://hub.docker.com/r/siscc/dotstatsuite-core-auth-management) | most recent release | Authorization Management web service                                                         | https://gitlab.com/sis-cc/.stat-suite/dotstatsuite-core-auth-management |
 | [siscc/dotstatsuite-dbup](https://hub.docker.com/r/siscc/dotstatsuite-dbup)                                 | most recent release | Database initialization/upgrade tool                                                         | https://gitlab.com/sis-cc/.stat-suite/dotstatsuite-core-data-access     |
 | [mcr.microsoft.com/mssql/server](https://hub.docker.com/_/microsoft-mssql-server)                           | 2017-latest-ubuntu  | Microsoft SQL Server for Linux                                                               | https://github.com/microsoft/mssql-docker                               |
-| [mariadb](https://hub.docker.com/_/mariadb)                                                                 | 11.4.3              | MariaDB Server                                                                               | https://github.com/MariaDB/server                                       |
 >>>
 
 </details>
@@ -608,16 +497,13 @@ Further details on setting up a Gmail account for SMTP service can be found here
 > | Variable                 | Description                                         | Default value                                             |
 > | ------------------------ | --------------------------------------------------- | --------------------------------------------------------- |
 > | SA_PASSWORD              | Admin password of MS SQL database                   | My-Mssql-Pwd-123                                          |
-> | MARIADB_ROOT_USER        | Admin user of MariaDb database                      | root (should always be set to root)                       |
-> | MARIADB_ROOT_PASSWORD    | Admin password of MariaDb database                  | My-Mariadb-Pwd-123                                        |
 > | NSI_DESIGN_PORT          | Port of NSI WS - Design instance                    | 80                                                        |
 > | NSI_RELEASE_PORT         | Port of NSI WS - Release instance                   | 81                                                        |
+> | NSI_RELEASE_PORT         | Port of NSI WS - HPR instance                       | 82                                                        |
 > | TRANSFER_PORT            | Port of Transfer service                            | 93                                                        |
 > | AUTH_PORT                | Port of Authorization Management service            | 94                                                        |
 > | SQL_PORT                 | Port of MS SQL Server                               | 1434                                                      |
-> | MARIADB_PORT             | Port of MariaDb Server                              | 3306                                                      |
 > | SQL_SERVER_HOST          | Name of the MS SQL database server host             | db (default name of MS SQL instance running in container) |
-> | MARIADB_SERVER_HOST      | Name of the MariaDb database server                 | mariadb (default name of the MariaDb instance running in container) |
 > | STRUCT_DB_DESIGN         | Name of structure database (Design dataspace)       | DesignStructDb                                            |
 > | STRUCT_DB_DESIGN_USER    | Username for structure database (Design dataspace)  | testLoginDesignStruct                                     |
 > | STRUCT_DB_DESIGN_PWD     | Password for structure database (Design dataspace)  | testLogin(!)Password                                      |
@@ -629,7 +515,13 @@ Further details on setting up a Gmail account for SMTP service can be found here
 > | STRUCT_DB_RELEASE_PWD    | Password for structure database (Release dataspace) | testLogin(!)Password                                      |
 > | DATA_DB_RELEASE          | Name of data database (Release dataspace)           | ReleaseDataDb                                             |
 > | DATA_DB_RELEASE_USER     | Username for data database (Release dataspace)      | testLoginReleaseData                                      |
-> | DATA_DB_RELEASE_PWD      | Password for data database (Release dataspace)      | testLogin(!)Password                                      |
+> | DATA_DB_HPR_PWD          | Password for data database (HPR dataspace)          | testLogin(!)Password                                      |
+> | STRUCT_DB_HPR            | Name of structure database (HPR dataspace)          | HPRStructDb                                               |
+> | STRUCT_DB_HPR_USER       | Username for structure database (HPR dataspace)     | testLoginHPRStruct                                        |
+> | STRUCT_DB_HPR_PWD        | Password for structure database (HPR dataspace)     | testLogin(!)Password                                      |
+> | DATA_DB_HPR              | Name of data database (HPR dataspace)               | HPRDataDb                                                 |
+> | DATA_DB_HPR_USER         | Username for data database (HPR dataspace)          | testLoginHPRData                                          |
+> | DATA_DB_HPR_PWD          | Password for data database (HPR dataspace)          | testLogin(!)Password                                      |
 > | COMMON_DB                | Name of common database                             | CommonDb                                                  |
 > | COMMON_DB_USER           | Username for common database                        | testLoginCommon                                           |
 > | COMMON_DB_PWD            | Password for common database                        | testLogin(!)Password                                      |
@@ -700,6 +592,7 @@ If the .Stat Suite installation is intended to be used with localhost access onl
 
 - NSI WS (Design dataspace): http://localhost:80/health
 - NSI WS (Release dataspace): http://localhost:81/health
+- NSI WS (HPR dataspace): http://localhost:82/health
 - Transfer service: http://localhost:93/health
 - Authorization Management service: http://localhost:94/health
 
@@ -707,6 +600,7 @@ Othwerwise please use the following pattern with using the proper hostname/ip ad
 
 - NSI WS (Design dataspace): http://[hostname_or_ip_address_of_your_server]:80/health
 - NSI WS (Release dataspace): http://[hostname_or_ip_address_of_your_server]:81/health
+- NSI WS (HPR dataspace): http://[hostname_or_ip_address_of_your_server]:82/health
 - Transfer service: http://[hostname_or_ip_address_of_your_server]:93/health
 - Authorization Management service: http://[hostname_or_ip_address_of_your_server]:94/health
 
@@ -719,11 +613,13 @@ If the .Stat Suite installation is intended to be used with localhost access onl
 
 - Codelists defined in Design dataspace: http://localhost:80/rest/codelist
 - Codelists defined in Release dataspace: http://localhost:81/rest/codelist
+- Codelists defined in HPR dataspace: http://localhost:82/rest/codelist
 
 Othwerwise please use the following pattern with using the proper hostname/ip address:
 
 - Codelists defined in Design dataspace: http://[hostname_or_ip_address_of_your_server]:80/rest/codelist
 - Codelists defined in Release dataspace: http://[hostname_or_ip_address_of_your_server]:81/rest/codelist
+- Codelists defined in HPR dataspace: http://[hostname_or_ip_address_of_your_server]:82/rest/codelist
 
 ##### Verification of the connection to Keycloak service
 
@@ -828,7 +724,7 @@ The _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/docker-compose-demo-js.yml_ docker-c
 #### Configuration of JavaScript services
 
 You can leave most of the configuration parameters with their defualt values.
-It's actually expected in case you would like to use the helper scripts of this repository for quicker setup of the monotenant installation of .Stat Suite with two dataspaces defined in .Net (back-end) services.
+It's actually expected in case you would like to use the helper scripts of this repository for quicker setup of the monotenant installation of .Stat Suite with three dataspaces defined in .Net (back-end) services.
 
 The only exception is the HOST parameter.
 In case you are planning to use this .Stat Suite installation only from localhost, you don't have to do anything with it.
@@ -893,10 +789,10 @@ You might also need to mount those files in case you dockerize Nginx server. Jus
 
 </details>
 
-##### Initialization of JavaScript services (monotenant with two dataspaces)
+##### Initialization of JavaScript services (monotenant with three dataspaces)
 
 Open a third terminal window (bash or Git Bash) and navigate to the _$DOTSTATSUITE-DOCKER-COMPOSE-ROOT/demo/_ folder.
-Execute the following script to initialize a monotenant installation with two dataspaces using the sample files from the repository:
+Execute the following script to initialize a monotenant installation with three dataspaces using the sample files from the repository:
 
 ```sh
 $ scripts/init.config.mono-tenant.two-dataspaces.sh
@@ -1128,7 +1024,7 @@ If you are requested to login, use the configured (application) user, by default
 
 After successful login you should see the homepage of DLM with TestAdmin user authenticated.
 
-Please select both dataspace filters (demo-design and demo-release) and also check the "Codelist" artefact type.
+Please select both dataspace filters (demo-design, demo-release and demo-hpr) and also check the "Codelist" artefact type.
 
 Now the default codelists defined in mapping store should appear on the screen.
 
@@ -1341,7 +1237,6 @@ The TCP ports used by default installation of .Stat Suite v8 are as follows:
 | Transfer service                  |      93       |
 | Authorization Management service  |      94       |
 | MS SQL Server                     |     1434      |
-| MariaDb SQL Server                |     3306      |
 | SMTP server port                  |      587      |
 | Postgress DB                      |     5432      |
 
