@@ -5,7 +5,7 @@ services:
         container_name: nsiws-demo-design
         user: app
         ports:
-          - "${NSI_DESIGN_PORT}:80"
+          - "${NSI_DESIGN_PORT}:8080"
         environment:
             # Authentication configuration
             auth__enabled: ${AUTH_ENABLED}
@@ -53,7 +53,7 @@ services:
         container_name: nsiws-demo-release
         user: app
         ports:
-          - "${NSI_RELEASE_PORT}:80"
+          - "${NSI_RELEASE_PORT}:8080"
         environment:
             # Authentication configuration
             auth__enabled: ${AUTH_ENABLED}
@@ -100,7 +100,7 @@ services:
         image: siscc/sdmxri-nsi-maapi:${NSI_IMAGE_TAG}
         container_name: nsiws-demo-hpr
         ports:
-          - "${NSI_HPR_PORT}:80"
+          - "${NSI_HPR_PORT}:8080"
         environment:
             # Authentication configuration
             auth__enabled: ${AUTH_ENABLED}
@@ -195,7 +195,7 @@ services:
         volumes:
           - "./logs:/app/logs"
         ports:
-          - "${TRANSFER_PORT}:80"
+          - "${TRANSFER_PORT}:8080"
         depends_on:
           dbup-data-design:
             condition: service_completed_successfully
@@ -231,7 +231,7 @@ services:
         volumes:
           - "./logs:/app/logs"
         ports:
-          - "${AUTH_PORT}:80"
+          - "${AUTH_PORT}:8080"
         depends_on:
           dbup-common:
             condition: service_completed_successfully          

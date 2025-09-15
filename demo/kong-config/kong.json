@@ -5,7 +5,7 @@
 	{
       "host": "nsiws-demo-hpr",
       "name": "nsi-service",
-      "port": 80,
+      "port": 8080,
       "protocol": "http",
       "retries": 0,
       "read_timeout": 3600000,
@@ -41,7 +41,7 @@
 	{
       "host": "get-data",
       "name": "data-service",
-      "port": 80,
+      "port": 8080,
       "protocol": "http",
       "retries": 0,
       "read_timeout": 3600000,
