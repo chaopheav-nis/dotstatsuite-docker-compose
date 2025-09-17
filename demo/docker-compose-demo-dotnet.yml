@@ -23,7 +23,7 @@ services:
             SQL_DATABASE: ${STRUCT_DB_DESIGN}
             SQL_USER: ${STRUCT_DB_DESIGN_USER}
             SQL_PASSWORD: ${STRUCT_DB_DESIGN_PWD}
-            SQL_PROVIDER: System.Data.SqlClient
+            SQL_PROVIDER: Microsoft.Data.SqlClient
             # Dissemination database configuration
             disseminationDbConnection__dbType: SqlServer
             disseminationDbConnection__connectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_DESIGN};User=${DATA_DB_DESIGN_USER};Password=${DATA_DB_DESIGN_PWD};TrustServerCertificate=True;
@@ -71,7 +71,7 @@ services:
             SQL_DATABASE: ${STRUCT_DB_RELEASE}
             SQL_USER: ${STRUCT_DB_RELEASE_USER}
             SQL_PASSWORD: ${STRUCT_DB_RELEASE_PWD}
-            SQL_PROVIDER: System.Data.SqlClient
+            SQL_PROVIDER: Microsoft.Data.SqlClient
             # Dissemination database configuration
             disseminationDbConnection__dbType: SqlServer
             disseminationDbConnection__connectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_RELEASE};User=${DATA_DB_RELEASE_USER};Password=${DATA_DB_RELEASE_PWD};TrustServerCertificate=True;
@@ -118,7 +118,7 @@ services:
             SQL_DATABASE: ${STRUCT_DB_HPR}
             SQL_USER: ${STRUCT_DB_HPR_USER}
             SQL_PASSWORD: ${STRUCT_DB_HPR_PWD}
-            SQL_PROVIDER: System.Data.SqlClient
+            SQL_PROVIDER: Microsoft.Data.SqlClient
             # Dissemination database configuration
             disseminationDbConnection__dbType: SqlServer
             disseminationDbConnection__connectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DATA_DB_HPR_USER};Password=${DATA_DB_HPR_PWD};TrustServerCertificate=True;
