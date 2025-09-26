@@ -65,8 +65,6 @@ if [ ! -d $DIR_CONFIG ]; then
    ./scripts/download-config.sh;
 fi
 
-read -p "Clean solr volumes ? (Y/N)" cleanSolr
-
 read -p "Use api gateway (kong) and sdmx data service ? (Y/N)" useKong
 
 # Re-initialize js configuration
@@ -81,12 +79,6 @@ sed -Ei "s#^HOST=.*#HOST=$HOST#g" .env
 #########################
 # Start docker services #
 #########################
-
-
-if [ $cleanSolr = 'y' ] || [ $cleanSolr = 'Y' ]
-then
-   scripts/clean-solr-volumes.sh;
-fi
 
 echo "Starting Keycloak services"
 #docker compose -f docker-compose-demo-keycloak.yml up -d --quiet-pull --pull always
@@ -108,23 +100,6 @@ fi
 echo "Adding read access for anonymous (all) users if not yet added"
 source ./.env
 docker exec -i mssql //opt/mssql-tools18/bin/sqlcmd -C -S $SQL_SERVER_HOST -U $DB_SA_USER -P $DB_SA_PASSWORD -Q "INSERT INTO $COMMON_DB.[dbo].[AUTHORIZATIONRULES] ([USERMASK],[ISGROUP],[DATASPACE],[ARTEFACTTYPE],[ARTEFACTAGENCYID],[ARTEFACTID],[ARTEFACTVERSION],[PERMISSION],[EDITEDBY],[EDITDATE]) SELECT '*',0,'*',0,'*','*','*',3,'system',getdate() WHERE NOT EXISTS (SELECT 1 FROM COMMONDB.[dbo].[AUTHORIZATIONRULES] WHERE [USERMASK]='*' AND [ISGROUP]=0 AND [DATASPACE]='*' AND [ARTEFACTTYPE]=0 AND [ARTEFACTAGENCYID]='*' AND [ARTEFACTID]='*' AND [ARTEFACTVERSION]='*');"
-
-echo -n "Services being started."
-
-#Wait until keycloak service is started ('Admin console listening' message appears in log')
-LOG="$(docker logs keycloak 2>&1 | grep -o 'Admin console listening')"
-
-while [ -z "$LOG" ];
-do
-   echo -n "."
-   sleep 2
-
-   LOG="$(docker logs keycloak 2>&1 | grep -o 'Admin console listening')"
-done
-
-echo "."
-echo "Switching off HTTPS requirement in Keycloak"
-./scripts/disable-ssl.sh
 
 echo "Services started:"
 

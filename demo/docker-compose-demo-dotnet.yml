@@ -10,20 +10,20 @@ services:
             # Authentication configuration
             auth__enabled: ${AUTH_ENABLED}
             auth__allowAnonymous: "true"
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
             auth__requireHttps: "false"
             auth__validateIssuer: "false"
             auth__showPii: "true"
             # Authorization configuration
             mappingStore__Id__Default: "demo-design" #Dataspace id
-            authorization__baseUrl: http://auth-service
+            authorization__baseUrl: http://auth-service:8080
             # Database configuration
             SQL_SERVER: ${SQL_SERVER_HOST}
             SQL_DATABASE: ${STRUCT_DB_DESIGN}
             SQL_USER: ${STRUCT_DB_DESIGN_USER}
             SQL_PASSWORD: ${STRUCT_DB_DESIGN_PWD}
-            SQL_PROVIDER: System.Data.SqlClient
+            SQL_PROVIDER: Microsoft.Data.SqlClient
             # Dissemination database configuration
             disseminationDbConnection__dbType: SqlServer
             disseminationDbConnection__connectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_DESIGN};User=${DATA_DB_DESIGN_USER};Password=${DATA_DB_DESIGN_PWD};TrustServerCertificate=True;
@@ -58,20 +58,20 @@ services:
             # Authentication configuration
             auth__enabled: ${AUTH_ENABLED}
             auth__allowAnonymous: "true"
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
             auth__requireHttps: "false"
             auth__validateIssuer: "false"
             auth__showPii: "true"
             # Authorization configuration
             mappingStore__Id__Default: "demo-release" #Dataspace id
-            authorization__baseUrl: http://auth-service
+            authorization__baseUrl: http://auth-service:8080
             # Database configuration
             SQL_SERVER: ${SQL_SERVER_HOST}
             SQL_DATABASE: ${STRUCT_DB_RELEASE}
             SQL_USER: ${STRUCT_DB_RELEASE_USER}
             SQL_PASSWORD: ${STRUCT_DB_RELEASE_PWD}
-            SQL_PROVIDER: System.Data.SqlClient
+            SQL_PROVIDER: Microsoft.Data.SqlClient
             # Dissemination database configuration
             disseminationDbConnection__dbType: SqlServer
             disseminationDbConnection__connectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_RELEASE};User=${DATA_DB_RELEASE_USER};Password=${DATA_DB_RELEASE_PWD};TrustServerCertificate=True;
@@ -105,20 +105,20 @@ services:
             # Authentication configuration
             auth__enabled: ${AUTH_ENABLED}
             auth__allowAnonymous: "true"
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
             auth__requireHttps: "false"
             auth__validateIssuer: "false"
             auth__showPii: "true"
             # Authorization configuration
             mappingStore__Id__Default: "demo-hpr" #Dataspace id
-            authorization__baseUrl: http://auth-service
+            authorization__baseUrl: http://auth-service:8080
             # Database configuration
             SQL_SERVER: ${SQL_SERVER_HOST}
             SQL_DATABASE: ${STRUCT_DB_HPR}
             SQL_USER: ${STRUCT_DB_HPR_USER}
             SQL_PASSWORD: ${STRUCT_DB_HPR_PWD}
-            SQL_PROVIDER: System.Data.SqlClient
+            SQL_PROVIDER: Microsoft.Data.SqlClient
             # Dissemination database configuration
             disseminationDbConnection__dbType: SqlServer
             disseminationDbConnection__connectionString: Server=${SQL_SERVER_HOST};Database=${DATA_DB_HPR};User=${DATA_DB_HPR_USER};Password=${DATA_DB_HPR_PWD};TrustServerCertificate=True;
@@ -146,9 +146,9 @@ services:
         container_name: transfer-service
         environment:
             auth__Enabled: ${AUTH_ENABLED}
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
-            auth__authorizationUrl: http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}/auth/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth
+            auth__authorizationUrl: http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth
             auth__scopes__0: openid
             auth__scopes__1: profile
             auth__scopes__2: email
@@ -217,9 +217,9 @@ services:
         container_name: auth-service
         environment:
             auth__enabled: ${AUTH_ENABLED}
-            auth__authority: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM}
+            auth__authority: http://keycloak:8080/realms/${KEYCLOAK_REALM}
             auth__clientId: ${KEYCLOAK_CLIENT_ID}
-            auth__authorizationUrl: http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}/auth/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth
+            auth__authorizationUrl: http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth
             auth__scopes__0: openid
             auth__scopes__1: profile
             auth__scopes__2: email
