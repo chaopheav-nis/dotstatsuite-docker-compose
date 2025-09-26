@@ -60,7 +60,7 @@
             "https://keycloak.bbb.org/auth/realms/OECD"
           ],
           "client_id": "app",
-          "scope": "openid email offline_access"
+          "scope": "openid email"
         },
         "spaces": [ "qa:stable" ],
         "datasources": [ "ds:qa:stable" ]
@@ -109,7 +109,7 @@
             "https://keycloak.bbb.org/auth/realms/OECD"
           ],
           "client_id": "app",
-          "scope": "openid email offline_access"
+          "scope": "openid email"
         },
         "spaces": [ "qa:stable" ],
         "datasources": [ "ds:qa:stable" ]

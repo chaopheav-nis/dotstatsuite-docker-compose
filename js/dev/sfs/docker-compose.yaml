@@ -16,10 +16,12 @@ services:
       - start
       - -c
       - -f
-    volumes:
-      - solr-data:/var/solr
+      - -Dsolr.modules=analysis-extras
+      - -Dsolr.max.booleanClauses=4096
     networks:
       - loop_network
+    volumes:
+      - solr-data:/var/solr
 
   mongo:
     image: mongo:7.0.1

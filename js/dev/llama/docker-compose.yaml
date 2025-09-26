@@ -6,7 +6,7 @@ volumes:
 
 services:
   solr:
-    image: solr:8.11.1
+    image: solr:9.6
     container_name: solr
     ports:
       - "${SOLR_PORT}:8983"
@@ -14,8 +14,8 @@ services:
       - docker-entrypoint.sh
       - solr
       - start
-      - -c
-      - -f
+      - --cloud
+      - -Dsolr.modules=analysis-extras
     networks:
       - dotstat_network
     volumes:
