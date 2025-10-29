@@ -25,6 +25,6 @@ fi
 echo "SQL Database type set to ["$DATABASE_TYPE_LOWER"]."
 echo "Stopping docker containers ..."
 
-docker compose -f docker-compose-demo-js.yml -f $DOTNET_COMPOSE_FILE -f docker-compose-demo-keycloak.yml
+docker compose -f docker-compose-demo-js.yml -f $DOTNET_COMPOSE_FILE -f docker-compose-demo-keycloak.yml down
 
 echo "Docker containers stopped."
