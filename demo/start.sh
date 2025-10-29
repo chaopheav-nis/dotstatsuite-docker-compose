@@ -65,8 +65,6 @@ if [ ! -d $DIR_CONFIG ]; then
    ./scripts/download-config.sh;
 fi
 
-read -p "Use api gateway (kong) and sdmx data service ? (Y/N)" useKong
-
 # Re-initialize js configuration
 scripts/init.config.mono-tenant.two-dataspaces.sh $HOST
 
@@ -81,7 +79,6 @@ sed -Ei "s#^HOST=.*#HOST=$HOST#g" .env
 #########################
 
 echo "Starting Keycloak services"
-#docker compose -f docker-compose-demo-keycloak.yml up -d --quiet-pull --pull always
 docker compose -f docker-compose-demo-keycloak.yml up -d --quiet-pull
 
 echo "Starting .Net services using" $DOTNET_COMPOSE_FILE
@@ -89,13 +86,6 @@ docker compose -f "$DOTNET_COMPOSE_FILE" up -d --quiet-pull
 
 echo "Starting JS services"
 docker compose -f docker-compose-demo-js.yml up -d --quiet-pull
-
-if [ $useKong = 'y' ] || [ $useKong = 'Y' ]
-then
-   echo "Starting kong"
-   docker compose -f docker-compose-demo-kong.yml up -d --quiet-pull
-   find ./config -type f -name "tenants.json" -exec sed -Ei 's#"http://'$HOST:82'#"http://'$HOST:8000'#g' {} +
-fi
 
 echo "Adding read access for anonymous (all) users if not yet added"
 source ./.env

@@ -33,16 +33,6 @@ services:
       extends:
         file: docker-compose-demo-dotnet.yml
         service: db
-        
-    kong:
-      extends:
-        file: docker-compose-demo-kong.yml
-        service: kong
-        
-    get-data:
-      extends:
-        file: docker-compose-demo-kong.yml
-        service: get-data        
 
 networks:
   dotstat_network:
