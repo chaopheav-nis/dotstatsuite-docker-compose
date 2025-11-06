@@ -1,35 +1,11 @@
 #!/bin/bash
 
-# Set default value for DATABASE_TYPE
-DATABASE_TYPE="${DATABASE_TYPE:-SqlServer}"
-
-# Convert DATABASE_TYPE to lowercase for case insensitive comparison
-DATABASE_TYPE_LOWER=$(echo "$DATABASE_TYPE" | tr '[:upper:]' '[:lower:]')
-
-# Check if the command line parameter --useMariaDb is provided, case insensitive
-for arg in "$@"; do
-    arg_lower=$(echo "$arg" | tr '[:upper:]' '[:lower:]')
-    if [ "$arg_lower" == "--usemariadb" ]; then
-        DATABASE_TYPE_LOWER="mariadb"
-    else
-        HOST=$arg
-    fi
-done
-
-# Determine which Docker Compose file to use
-if [ "$DATABASE_TYPE_LOWER" == "mariadb" ]; then
-    DOTNET_COMPOSE_FILE="docker-compose-demo-dotnet-mariadb.yml"
-else
-    DOTNET_COMPOSE_FILE="docker-compose-demo-dotnet.yml"
-    DATABASE_TYPE_LOWER="sqlserver"
-fi
-
-echo "SQL Database type set to ["$DATABASE_TYPE_LOWER"]."
+DOTNET_COMPOSE_FILE="docker-compose-demo-dotnet.yml"
 
 ##################
 # Initialization #
 ##################
-####################### HOST=$1
+HOST=$1
 DIR_CONFIG='./config'
 #determine current OS
 CURRENT_OS=$(uname -s)
