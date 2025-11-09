@@ -12,6 +12,7 @@ services:
       - docker-entrypoint.sh
       - solr
       - start
+      - -Dlog4j2.formatMsgNoLookups=true
       - -c
       - -f
       - -Dsolr.modules=analysis-extras
