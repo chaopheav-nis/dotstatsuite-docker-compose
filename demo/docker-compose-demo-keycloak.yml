@@ -43,6 +43,8 @@ services:
         KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
         KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_USER}
         KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+        KC_PROXY: edge
+        KC_PROXY_HEADERS: xforwarded
     networks:
         - dotstat_network
 
